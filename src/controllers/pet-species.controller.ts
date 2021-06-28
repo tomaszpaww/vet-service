@@ -7,21 +7,21 @@ import {
   getModelSchemaRef,
 } from '@loopback/rest';
 import {
-  Animal,
+  Pet,
   Species,
 } from '../models';
-import {AnimalRepository} from '../repositories';
+import {PetRepository} from '../repositories';
 
-export class AnimalSpeciesController {
+export class PetSpeciesController {
   constructor(
-    @repository(AnimalRepository)
-    public animalRepository: AnimalRepository,
+    @repository(PetRepository)
+    public petRepository: PetRepository,
   ) { }
 
-  @get('/animals/{id}/species', {
+  @get('/pets/{id}/species', {
     responses: {
       '200': {
-        description: 'Species belonging to Animal',
+        description: 'Species belonging to Pet',
         content: {
           'application/json': {
             schema: {type: 'array', items: getModelSchemaRef(Species)},
@@ -31,8 +31,8 @@ export class AnimalSpeciesController {
     },
   })
   async getSpecies(
-    @param.path.number('id') id: typeof Animal.prototype.id,
+    @param.path.number('id') id: typeof Pet.prototype.id,
   ): Promise<Species> {
-    return this.animalRepository.species(id);
+    return this.petRepository.species(id);
   }
 }

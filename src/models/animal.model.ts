@@ -1,5 +1,4 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
-import {Species} from './species.model';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
 export class Animal extends Entity {
@@ -20,9 +19,6 @@ export class Animal extends Entity {
     default: false,
   })
   vaccinated?: boolean;
-
-  @belongsTo(() => Species)
-  speciesId: number;
 
   constructor(data?: Partial<Animal>) {
     super(data);

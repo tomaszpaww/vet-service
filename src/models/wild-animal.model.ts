@@ -1,5 +1,6 @@
-import {model, property} from '@loopback/repository';
+import {model, property, belongsTo} from '@loopback/repository';
 import {Animal} from '.';
+import {Species} from './species.model';
 
 @model()
 export class WildAnimal extends Animal {
@@ -8,6 +9,8 @@ export class WildAnimal extends Animal {
   })
   trackingId?: number;
 
+  @belongsTo(() => Species)
+  speciesId: number;
 
   constructor(data?: Partial<WildAnimal>) {
     super(data);
