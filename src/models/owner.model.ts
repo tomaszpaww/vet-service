@@ -1,5 +1,6 @@
-import {Entity, model, property, hasOne} from '@loopback/repository';
+import {Entity, model, property, hasOne, hasMany} from '@loopback/repository';
 import {Address} from './address.model';
+import {Pet} from './pet.model';
 
 @model()
 export class Owner extends Entity {
@@ -18,6 +19,9 @@ export class Owner extends Entity {
 
   @hasOne(() => Address)
   address: Address;
+
+  @hasMany(() => Pet)
+  pets: Pet[];
 
   constructor(data?: Partial<Owner>) {
     super(data);

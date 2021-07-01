@@ -4,18 +4,12 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Owner} from '../models';
 import {OwnerRepository} from '../repositories';
@@ -23,8 +17,8 @@ import {OwnerRepository} from '../repositories';
 export class OwnerController {
   constructor(
     @repository(OwnerRepository)
-    public ownerRepository : OwnerRepository,
-  ) {}
+    public ownerRepository: OwnerRepository,
+  ) { }
 
   @post('/owners')
   @response(200, {
@@ -137,7 +131,7 @@ export class OwnerController {
     @param.path.number('id') id: number,
     @requestBody() owner: Owner,
   ): Promise<void> {
-    await this.ownerRepository.replaceById(id, owner);
+    await this.ownerRepository.updateById(id, owner);
   }
 
   @del('/owners/{id}')

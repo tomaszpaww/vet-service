@@ -1,7 +1,7 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {BelongsToAccessor, DefaultCrudRepository, repository} from '@loopback/repository';
 import {PostgresDbDataSource} from '../datasources';
-import {Pet, PetRelations, Owner, Species} from '../models';
+import {Owner, Pet, PetRelations, Species} from '../models';
 import {OwnerRepository} from './owner.repository';
 import {SpeciesRepository} from './species.repository';
 

@@ -1,10 +1,12 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
+import {Pet} from './pet.model';
+import {WildAnimal} from './wild-animal.model';
 
 @model()
 export class Species extends Entity {
   @property({
-    type: 'number',
     id: true,
+    type: 'number',
     generated: true,
   })
   id?: number;
@@ -14,6 +16,12 @@ export class Species extends Entity {
     required: true,
   })
   label: string;
+
+  @hasMany(() => Pet)
+  pets: Pet[];
+
+  @hasMany(() => WildAnimal)
+  wildAnimals: WildAnimal[];
 
   constructor(data?: Partial<Species>) {
     super(data);

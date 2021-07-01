@@ -1,7 +1,18 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Owner} from './owner.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_address_ownerId: {
+        name: 'fk_address_ownerId',
+        entity: 'Owner',
+        entityKey: 'id',
+        foreignKey: 'ownerId',
+      },
+    }
+  }
+})
 export class Address extends Entity {
   @property({
     type: 'number',
@@ -30,7 +41,7 @@ export class Address extends Entity {
   })
   zipCode?: string;
 
-  @belongsTo(() => Owner)
+  @belongsTo(() => Owner, {}, {required: true})
   ownerId: number;
 
   constructor(data?: Partial<Address>) {
