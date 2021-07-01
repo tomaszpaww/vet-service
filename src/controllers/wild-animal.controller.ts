@@ -4,27 +4,22 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
   response,
+  RestHttpErrors
 } from '@loopback/rest';
-import {WildAnimal} from '../models';
 import {WildAnimalRepository} from '../repositories';
+import {WildAnimal} from './../models/wild-animal.model';
 
 export class WildAnimalController {
   constructor(
     @repository(WildAnimalRepository)
-    public wildAnimalRepository : WildAnimalRepository,
-  ) {}
+    public wildAnimalRepository: WildAnimalRepository,
+  ) { }
 
   @post('/wild-animals')
   @response(200, {
@@ -44,7 +39,11 @@ export class WildAnimalController {
     })
     wildAnimal: Omit<WildAnimal, 'id'>,
   ): Promise<WildAnimal> {
-    return this.wildAnimalRepository.create(wildAnimal);
+    if (await this.wildAnimalRepository.validateUniqunessOfTrackingId(wildAnimal)) {
+      return this.wildAnimalRepository.create(wildAnimal);
+    } else {
+      throw RestHttpErrors.invalidRequestBody([{message: 'is not unique!', code: 'index', path: 'trackingId', info: {}}]);
+    }
   }
 
   @get('/wild-animals/count')
@@ -126,7 +125,7 @@ export class WildAnimalController {
     })
     wildAnimal: WildAnimal,
   ): Promise<void> {
-    await this.wildAnimalRepository.updateById(id, wildAnimal);
+    return this.wildAnimalRepository.updateById(id, wildAnimal);
   }
 
   @put('/wild-animals/{id}')
@@ -137,7 +136,11 @@ export class WildAnimalController {
     @param.path.number('id') id: number,
     @requestBody() wildAnimal: WildAnimal,
   ): Promise<void> {
-    await this.wildAnimalRepository.replaceById(id, wildAnimal);
+    if (await this.wildAnimalRepository.validateUniqunessOfTrackingId(wildAnimal)) {
+      return this.wildAnimalRepository.replaceById(id, wildAnimal);
+    } else {
+      throw RestHttpErrors.invalidRequestBody([{message: 'is not unique!', code: 'index', path: 'trackingId', info: {}}])
+    }
   }
 
   @del('/wild-animals/{id}')

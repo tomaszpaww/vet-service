@@ -1,7 +1,8 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {BelongsToAccessor, DefaultCrudRepository, repository} from '@loopback/repository';
 import {PostgresDbDataSource} from '../datasources';
-import {WildAnimal, WildAnimalRelations, Species} from '../models';
+import {Species, WildAnimalRelations} from '../models';
+import {WildAnimal} from './../models/wild-animal.model';
 import {SpeciesRepository} from './species.repository';
 
 export class WildAnimalRepository extends DefaultCrudRepository<
@@ -18,5 +19,9 @@ export class WildAnimalRepository extends DefaultCrudRepository<
     super(WildAnimal, dataSource);
     this.species = this.createBelongsToAccessorFor('species', speciesRepositoryGetter,);
     this.registerInclusionResolver('species', this.species.inclusionResolver);
+  }
+
+  async validateUniqunessOfTrackingId(wildAnimal: WildAnimal): Promise<boolean> {
+    return (await this.find({where: {trackingId: wildAnimal.trackingId}})).length == 0
   }
 }
